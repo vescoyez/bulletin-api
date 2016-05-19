@@ -1,11 +1,11 @@
 class ClassroomsController < ApplicationController
+  before_action :set_classroom, only: [:show, :edit, :update, :destroy]
 
   def index
     @classrooms = Classroom.where(user: current_user)
   end
 
   def show
-    @classroom = Classroom.find(params[:id])
   end
 
   def new
@@ -19,24 +19,25 @@ class ClassroomsController < ApplicationController
   end
 
   def edit
-    @classroom = Classroom.find(params[:id])
   end
 
   def update
-    @classroom = Classroom.find(params[:id])
     @classroom.update(classroom_params)
 
     redirect_to classroom_path(@classroom)
   end
 
   def destroy
-    @classroom = Classroom.find(params[:id])
     @classroom.destroy
 
     redirect_to classrooms_path
   end
 
   private
+
+  def set_classroom
+    @classroom = Classroom.find(params[:id])
+  end
 
   def classroom_params
     params.require(:classroom).permit(:name, :user_id)
