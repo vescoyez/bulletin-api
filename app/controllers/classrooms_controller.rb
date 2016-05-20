@@ -8,32 +8,30 @@ class ClassroomsController < ApplicationController
   def show
   end
 
-  def new
-    @classroom = Classroom.new
-    authorize @classroom
-  end
-
   def create
     @classroom = current_user.classrooms.build(classroom_params)
     authorize @classroom
-    @classroom.save
-
-    redirect_to classroom_path(@classroom)
-  end
-
-  def edit
+    if @classroom.save
+      render :show
+    else
+      render_error
+    end
   end
 
   def update
-    @classroom.update(classroom_params)
-
-    redirect_to classroom_path(@classroom)
+    if @classroom.update(classroom_params)
+      render :show
+    else
+      render_error
+    end
   end
 
   def destroy
-    @classroom.destroy
-
-    redirect_to classrooms_path
+    if @classroom.destroy
+      render :index
+    else
+      render_error
+    end
   end
 
   private
@@ -44,6 +42,10 @@ class ClassroomsController < ApplicationController
   end
 
   def classroom_params
-    params.require(:classroom).permit(:name, :user_id)
+    params.require(:classroom).permit(:name)
+  end
+
+  def render_error
+    render json: { errors: @restaurant.errors.full_messages }, status: :unprocessable_entity
   end
 end

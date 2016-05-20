@@ -25,6 +25,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Authentication
 gem 'devise'
+gem "simple_token_authentication"
 
 # Authorization
 gem 'pundit'
