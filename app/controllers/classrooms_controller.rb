@@ -2,18 +2,21 @@ class ClassroomsController < ApplicationController
   before_action :set_classroom, only: [:show, :edit, :update, :destroy]
 
   def index
-    @classrooms = Classroom.where(user: current_user)
+    @classrooms = policy_scope(Classroom)
   end
 
   def show
   end
 
   def new
-    @classroom = Classroom.new(user: current_user)
+    @classroom = Classroom.new
+    authorize @classroom
   end
 
   def create
-    @classroom = Classroom.create(classroom_params)
+    @classroom = current_user.classrooms.build(classroom_params)
+    authorize @classroom
+    @classroom.save
 
     redirect_to classroom_path(@classroom)
   end
@@ -37,6 +40,7 @@ class ClassroomsController < ApplicationController
 
   def set_classroom
     @classroom = Classroom.find(params[:id])
+    authorize @classroom
   end
 
   def classroom_params
