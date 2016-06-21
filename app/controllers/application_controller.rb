@@ -1,9 +1,9 @@
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
+  protect_from_forgery with: :null_session
 
-  before_action :authenticate_user!
+  acts_as_token_authentication_handler_for User
 
   include Pundit
 
@@ -12,8 +12,8 @@ class ApplicationController < ActionController::Base
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
-  def user_not_authorized
-    flash[:alert] = "You are not authorized to perform this action."
-    redirect_to(root_path)
+  def user_not_authorized(exception)
+    policy_name = exception.policy.class.to_s.underscore
+    render json: { type: 'error', message: "Unauthorized #{policy_name.camelize}.#{exception.query}" }, status: :unauthorized
   end
 end
