@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   root to: "pages#home"
-  devise_for :users
+  devise_for :users, :controllers => {sessions: 'sessions', registrations: 'registrations', passwords: 'passwords'}
   resources :classrooms, defaults: { format: :json }, only: [:index, :show, :create, :update, :destroy]
 
   # The priority is based upon order of creation: first created -> highest priority.
