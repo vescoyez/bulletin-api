@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   root to: "pages#home"
   devise_for :users, :controllers => {sessions: 'sessions', registrations: 'registrations', passwords: 'passwords'}
-  resources :classrooms, defaults: { format: :json }, only: [:index, :show, :create, :update, :destroy]
+  resources :classrooms, defaults: { format: :json }, only: [:index, :show, :create, :update, :destroy] do
+    resources :students, defaults: { format: :json }, only: [:index, :show, :create, :update, :destroy]
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

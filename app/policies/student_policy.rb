@@ -1,7 +1,7 @@
-class ClassroomPolicy < ApplicationPolicy
+class StudentPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.where(user: user)
+      scope.includes(:classroom).where(classrooms: { user_id: user.id })
     end
   end
 
@@ -17,7 +17,9 @@ class ClassroomPolicy < ApplicationPolicy
     user_is_owner?
   end
 
+  private
+
   def user_is_owner?
-    record.user == user
+    record.classroom.user == user
   end
 end
