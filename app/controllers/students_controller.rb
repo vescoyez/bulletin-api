@@ -1,6 +1,5 @@
 class StudentsController < ApplicationController
-  before_action :set_classroom
-  before_action :set_student, only: [:show, :edit, :update, :destroy]
+  before_action :set_student, only: [:show, :update, :destroy]
 
   def index
     @students = policy_scope(Student)
@@ -10,6 +9,8 @@ class StudentsController < ApplicationController
   end
 
   def create
+    @classroom = Classroom.find(params[:classroom_id])
+    authorize @classroom
     @student = @classroom.students.build(student_params)
     authorize @student
     if @student.save
@@ -36,11 +37,6 @@ class StudentsController < ApplicationController
   end
 
   private
-
-  def set_classroom
-    @classroom = Classroom.find(params[:classroom_id])
-    authorize @classroom
-  end
 
   def set_student
     @student = Student.find(params[:id])
