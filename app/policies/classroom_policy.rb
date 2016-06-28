@@ -5,10 +5,6 @@ class ClassroomPolicy < ApplicationPolicy
     end
   end
 
-  def index?
-    user_is_owner?
-  end
-
   def create?
     true
   end
@@ -20,8 +16,6 @@ class ClassroomPolicy < ApplicationPolicy
   def destroy?
     user_is_owner?
   end
-
-  private
 
   def user_is_owner?
     record.user == user
